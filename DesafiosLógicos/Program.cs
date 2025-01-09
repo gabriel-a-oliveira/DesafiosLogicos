@@ -6,6 +6,11 @@ class Program
 {
     static void Main()
     {
+        MenuPrincipal();
+    }
+
+    private static void MenuPrincipal()
+    {
         Console.WriteLine("Escolha um exemplo para rodar:");
         Console.WriteLine("1) Valor da variável SOMA");
         Console.WriteLine("2) Sequência de Fibonacci");
@@ -18,19 +23,24 @@ class Program
         switch (escolha)
         {
             case 1:
+                Console.Clear();
                 ValorDaVariavelSoma();
                 break;
             case 2:
+                Console.Clear();
                 SequenciaFibonacci();
                 break;
             case 3:
+                Console.Clear();
                 FaturamentoDiario();
                 break;
             case 4:
+                Console.Clear();
                 PercentualRepresentacaoEstado();
                 break;
             case 5:
                 InverterString();
+                Console.Clear();
                 break;
             default:
                 Console.WriteLine("Opção inválida. Tente novamente.");
@@ -38,15 +48,33 @@ class Program
         }
     }
 
+    private static void VoltarMenu()
+    {
+        Console.ReadKey();
+        Console.Clear();
+        MenuPrincipal();
+    }
+
     static void ValorDaVariavelSoma()
     {
+        Console.WriteLine("1) Valor da variável:");
+        Console.WriteLine("int INDICE = 13;");
+        Console.WriteLine("int SOMA = 0;");
+        Console.WriteLine("int K = 0;");
+
         int INDICE = 13, SOMA = 0, K = 0;
+
+        Console.WriteLine("\nCalculando SOMA com o loop...");
+
         while (K < INDICE)
         {
             K = K + 1;
             SOMA = SOMA + K;
+            Console.WriteLine($"K = {K}, SOMA = {SOMA}");
         }
+
         Console.WriteLine($"O valor da variável SOMA é: {SOMA}");
+        VoltarMenu();
     }
 
     static void SequenciaFibonacci()
@@ -58,6 +86,8 @@ class Program
             Console.WriteLine($"O número {numero} pertence à sequência de Fibonacci.");
         else
             Console.WriteLine($"O número {numero} NÃO pertence à sequência de Fibonacci.");
+
+        VoltarMenu();
     }
 
     static bool VerificaFibonacci(int numero)
@@ -71,6 +101,7 @@ class Program
         }
         return b == numero;
     }
+
     static void FaturamentoDiario()
     {
         string json = @"
@@ -83,23 +114,41 @@ class Program
             { ""dia"": 6, ""faturamento"": 0 },
             { ""dia"": 7, ""faturamento"": 0 },
             { ""dia"": 8, ""faturamento"": 34567.00 },
-            { ""dia"": 9, ""faturamento"": 12345.67 }
+            { ""dia"": 9, ""faturamento"": 12345.67 },
+            { ""dia"": 10, ""faturamento"": 15000.00 },
+            { ""dia"": 11, ""faturamento"": 45235.89 },
+            { ""dia"": 12, ""faturamento"": 30567.44 },
+            { ""dia"": 13, ""faturamento"": 48960.12 },
+            { ""dia"": 14, ""faturamento"": 28945.33 },
+            { ""dia"": 15, ""faturamento"": 10234.56 },
+            { ""dia"": 16, ""faturamento"": 22222.22 },
+            { ""dia"": 17, ""faturamento"": 39478.13 },
+            { ""dia"": 18, ""faturamento"": 16000.77 },
+            { ""dia"": 19, ""faturamento"": 41323.44 },
+            { ""dia"": 20, ""faturamento"": 29567.12 }
         ]";
 
-        var faturamentos = JsonConvert.DeserializeObject<List<Faturamento>>(json);
+        var faturamentos = JsonConvert.DeserializeObject<List<dynamic>>(json);
 
-        var diasComFaturamento = faturamentos.Where(f => f.ValorFaturamento > 0).ToList();
+        foreach (var faturamento in faturamentos)
+        {
+            Console.WriteLine($"Dia: {faturamento.dia}, Faturamento: {faturamento.faturamento:F2}");
+        }
 
-        double menorFaturamento = diasComFaturamento.Min(f => f.ValorFaturamento);
-        double maiorFaturamento = diasComFaturamento.Max(f => f.ValorFaturamento);
+        double menorFaturamento = faturamentos
+            .Where(f => (double)f.faturamento > 0)
+            .Min(f => (double)f.faturamento);
 
-        double mediaFaturamento = diasComFaturamento.Average(f => f.ValorFaturamento);
+        double maiorFaturamento = faturamentos.Max(f => (double)f.faturamento);
 
-        int diasAcimaDaMedia = diasComFaturamento.Count(f => f.ValorFaturamento > mediaFaturamento);
+        double mediaFaturamento = faturamentos.Average(f => (double)f.faturamento);
+
+        int diasAcimaDaMedia = faturamentos.Count(f => (double)f.faturamento > mediaFaturamento);
 
         Console.WriteLine($"Menor valor de faturamento: R${menorFaturamento:F2}");
         Console.WriteLine($"Maior valor de faturamento: R${maiorFaturamento:F2}");
         Console.WriteLine($"Número de dias com faturamento superior à média: {diasAcimaDaMedia}");
+        VoltarMenu();
     }
 
     static void PercentualRepresentacaoEstado()
@@ -113,17 +162,27 @@ class Program
             { "Outros", 19849.53 }
         };
 
+        Console.WriteLine("Faturamento por Estado:");
+        foreach (var estado in faturamentoEstado)
+        {
+            Console.WriteLine($"{estado.Key}: R${estado.Value:F2}");
+        }
+
+        Console.WriteLine();
         double faturamentoTotal = 0;
         foreach (var valor in faturamentoEstado.Values)
         {
             faturamentoTotal += valor;
         }
 
+        Console.WriteLine("Percentual de Representação de Cada Estado:");
         foreach (var estado in faturamentoEstado)
         {
             double percentual = (estado.Value / faturamentoTotal) * 100;
             Console.WriteLine($"{estado.Key}: {percentual:F2}%");
         }
+
+        VoltarMenu();
     }
 
     static void InverterString()
@@ -154,7 +213,7 @@ class Program
         return new (caracteres);
     }
 }
-class Faturamento
+public class Faturamento
 {
     public int Dia { get; set; }
     public double ValorFaturamento { get; set; }
