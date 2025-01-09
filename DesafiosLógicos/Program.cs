@@ -108,44 +108,56 @@ class Program
     {
         string json = @"
         [
-            { ""dia"": 1, ""faturamento"": 67836.43 },
-            { ""dia"": 2, ""faturamento"": 36678.66 },
-            { ""dia"": 3, ""faturamento"": 29229.88 },
-            { ""dia"": 4, ""faturamento"": 27165.48 },
-            { ""dia"": 5, ""faturamento"": 19849.53 },
-            { ""dia"": 6, ""faturamento"": 0 },
-            { ""dia"": 7, ""faturamento"": 0 },
-            { ""dia"": 8, ""faturamento"": 34567.00 },
-            { ""dia"": 9, ""faturamento"": 12345.67 },
-            { ""dia"": 10, ""faturamento"": 15000.00 },
-            { ""dia"": 11, ""faturamento"": 45235.89 },
-            { ""dia"": 12, ""faturamento"": 30567.44 },
-            { ""dia"": 13, ""faturamento"": 48960.12 },
-            { ""dia"": 14, ""faturamento"": 28945.33 },
-            { ""dia"": 15, ""faturamento"": 10234.56 },
-            { ""dia"": 16, ""faturamento"": 22222.22 },
-            { ""dia"": 17, ""faturamento"": 39478.13 },
-            { ""dia"": 18, ""faturamento"": 16000.77 },
-            { ""dia"": 19, ""faturamento"": 41323.44 },
-            { ""dia"": 20, ""faturamento"": 29567.12 }
+            { ""dia"": 1, ""valor"": 22174.1664 },
+            { ""dia"": 2, ""valor"": 24537.6698 },
+            { ""dia"": 3, ""valor"": 26139.6134 },
+            { ""dia"": 4, ""valor"": 0.0 },
+            { ""dia"": 5, ""valor"": 0.0 },
+            { ""dia"": 6, ""valor"": 26742.6612 },
+            { ""dia"": 7, ""valor"": 0.0 },
+            { ""dia"": 8, ""valor"": 42889.2258 },
+            { ""dia"": 9, ""valor"": 46251.174 },
+            { ""dia"": 10, ""valor"": 11191.4722 },
+            { ""dia"": 11, ""valor"": 0.0 },
+            { ""dia"": 12, ""valor"": 0.0 },
+            { ""dia"": 13, ""valor"": 3847.4823 },
+            { ""dia"": 14, ""valor"": 373.7838 },
+            { ""dia"": 15, ""valor"": 2659.7563 },
+            { ""dia"": 16, ""valor"": 48924.2448 },
+            { ""dia"": 17, ""valor"": 18419.2614 },
+            { ""dia"": 18, ""valor"": 0.0 },
+            { ""dia"": 19, ""valor"": 0.0 },
+            { ""dia"": 20, ""valor"": 35240.1826 },
+            { ""dia"": 21, ""valor"": 43829.1667 },
+            { ""dia"": 22, ""valor"": 18235.6852 },
+            { ""dia"": 23, ""valor"": 4355.0662 },
+            { ""dia"": 24, ""valor"": 13327.1025 },
+            { ""dia"": 25, ""valor"": 0.0 },
+            { ""dia"": 26, ""valor"": 0.0 },
+            { ""dia"": 27, ""valor"": 25681.8318 },
+            { ""dia"": 28, ""valor"": 1718.1221 },
+            { ""dia"": 29, ""valor"": 13220.495 },
+            { ""dia"": 30, ""valor"": 8414.61 }
         ]";
 
         var faturamentos = JsonConvert.DeserializeObject<List<dynamic>>(json);
 
         foreach (var faturamento in faturamentos)
         {
-            Console.WriteLine($"Dia: {faturamento.dia}, Faturamento: {faturamento.faturamento:F2}");
+            Console.WriteLine($"Dia: {faturamento.dia}, Valor: {faturamento.valor:F2}");
         }
 
         double menorFaturamento = faturamentos
-            .Where(f => (double)f.faturamento > 0)
-            .Min(f => (double)f.faturamento);
+            .Where(f => (double)f.valor > 0)
+            .Min(f => (double)f.valor);
 
-        double maiorFaturamento = faturamentos.Max(f => (double)f.faturamento);
+        double maiorFaturamento = faturamentos.Max(f => (double)f.valor);
 
-        double mediaFaturamento = faturamentos.Average(f => (double)f.faturamento);
+        double mediaFaturamento = faturamentos
+            .Where(f => (double)f.valor > 0)
+            .Average(f => (double)f.valor);
 
-        int diasAcimaDaMedia = faturamentos.Count(f => (double)f.faturamento > mediaFaturamento);
+        int diasAcimaDaMedia = faturamentos.Count(f => (double)f.valor > mediaFaturamento);
 
         Console.WriteLine($"Menor valor de faturamento: R${menorFaturamento:F2}");
         Console.WriteLine($"Maior valor de faturamento: R${maiorFaturamento:F2}");
@@ -217,8 +229,3 @@ class Program
     }
 }
 
-public class Faturamento
-{
-    public int Dia { get; set; }
-    public double ValorFaturamento { get; set; }
-}
