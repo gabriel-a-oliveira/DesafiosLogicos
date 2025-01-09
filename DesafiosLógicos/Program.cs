@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Runtime.InteropServices;
 
 class Program
 {
@@ -17,6 +15,7 @@ class Program
         Console.WriteLine("3) Faturamento Diário");
         Console.WriteLine("4) Percentual de Representação por Estado");
         Console.WriteLine("5) Inverter String");
+        Console.WriteLine("6) Sair");
 
         int escolha = int.Parse(Console.ReadLine());
 
@@ -42,6 +41,9 @@ class Program
                 InverterString();
                 Console.Clear();
                 break;
+            case 6:
+                Console.WriteLine("Saindo do programa...");
+                Environment.Exit(0); break;
             default:
                 Console.WriteLine("Opção inválida. Tente novamente.");
                 break;
@@ -190,6 +192,7 @@ class Program
         Console.Write("Digite uma string para inverter: ");
         string texto = Console.ReadLine();
         Console.WriteLine($"String invertida: {InverterStringManual(texto)}");
+        VoltarMenu();
     }
 
     static string InverterStringManual(string texto)
@@ -213,6 +216,7 @@ class Program
         return new (caracteres);
     }
 }
+
 public class Faturamento
 {
     public int Dia { get; set; }
